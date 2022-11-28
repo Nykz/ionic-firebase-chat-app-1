@@ -1,0 +1,88 @@
+<ion-header class="title-header">
+  <ion-toolbar color="primary">
+    <ion-title>Fire Chat</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" id="popover">
+        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-popover #popover trigger="popover" triggerAction="click">
+      <ng-template>
+        <ion-content class="ion-padding ion-text-center" (click)="logout()">
+          <ion-label color="danger">
+            LOGOUT
+          </ion-label>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-toolbar>
+  <ion-segment [value]="segment" mode="md" (ionChange)="onSegmentChanged($event)">
+    <ion-segment-button value="status">
+      <ion-label>Status</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="chats">
+      <ion-label>Chats</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="calls">
+      <ion-label>Calls</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content color="light">
+
+  <ion-list *ngIf="segment == 'chats' && (chatRooms) as rooms">
+
+    <ion-list-header class="ion-padding-bottom" color="light">
+      RECENT CHATS
+    </ion-list-header>
+
+    <ion-item
+    *ngFor="let item of rooms" 
+    (click)="getChat(item)"
+    [detail]="true">
+      <ion-avatar slot="start">
+        <img [src]="item?.photo" />
+      </ion-avatar>
+      <ion-label>
+        {{item?.name}}
+        <p>
+          <ion-text>
+            message
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-text slot="end" color="medium">10:00 AM</ion-text>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button (click)="newChat()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-modal #new_chat [isOpen]="open_new_chat" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>New Chat</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content color="light" *ngIf="users as user$">
+        <ion-list class="ion-margin-top" [style.background]="'transparent'" lines="none">
+          <app-user-list 
+          *ngFor="let item of user$" 
+          [item]="item"
+          (onClick)="startChat($event)">
+        </app-user-list>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

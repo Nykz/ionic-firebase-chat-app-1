@@ -1,0 +1,11 @@
+<ion-item
+  lines="full"
+  (click)="redirect()"
+  detail="true">
+  <ion-avatar slot="start">
+    <img [src]="item?.photo" />
+  </ion-avatar>
+  <ion-label>
+    {{item?.name}}
+  </ion-label>
+</ion-item>
